@@ -1,0 +1,9 @@
+Register:
+curl -i -X POST -H "Content-Type: application/json" -d '{"username":"vika","password":"python3"}' http://localhost:8000/app/api/v1.0/register
+curl -i -X POST -H "Content-Type: application/json" -d '{"username":"kate","password":"python5"}' http://localhost:5000/app/api/v1.0/register
+
+Login:
+curl -i -X POST -H "Content-Type: application/json" -d '{"username":"vika","password":"python3"}' http://localhost:5000/app/api/v1.0/login
+
+Update:
+curl -i -X PUT -H 'Content-Type: application/json' -H 'Cookie: access_token_cookie=TOKEN' -d '{"first_name": "John", "last_name": "Doe", "birth_date": "1990-01-01", "email": "john.doe@example.com"}' http://localhost:8000/app/api/v1.0/update

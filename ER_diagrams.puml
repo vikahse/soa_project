@@ -1,0 +1,50 @@
+@startuml
+
+title ER диаграммы
+
+entity User {
+  * USER_ID : number <<generated>>
+  --
+  * First_Name : varchar
+  * Last_Name : varchar
+  * Age : integer
+  * Username : varchar
+  * Email : varchar
+  * Password : varchar
+}
+
+entity Post {
+  * POST_ID : number <<generated>>
+  --
+  * USER_ID : number <<generated>>
+  * Title : varchar
+  * Content : text
+  * Date : datetime
+}
+
+entity Statistics {
+  * POST_ID : number <<generated>>
+  --
+  * USER_ID : number <<generated>>
+  * Likes : integer
+  * Views : integer
+  * Comments : integer
+}
+
+entity Comment {
+  * COMMENT_ID : number <<generated>>
+  --
+  * POST_ID : number <<generated>>
+  * USER_ID : number <<generated>>
+  * Content : text
+  * Date : datetime
+  * Comment_Reply_ID : number <<generated>> (None by default)
+}
+
+User }o-- Post
+User }o-- Comment
+User }o-- Statistics
+Post }o-- Comment
+Post ||-- Statistics
+
+@enduml

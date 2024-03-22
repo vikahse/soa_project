@@ -1,0 +1,37 @@
+@startuml
+
+!include  https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!define SPRITESURL https://raw.githubusercontent.com/rabelenda/cicon-plantuml-sprites/v1.0/sprites
+
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+!include DEVICONS/python.puml
+!include DEVICONS/postgresql.puml
+!includeurl SPRITESURL/kafka.puml
+!include FONTAWESOME/users.puml
+
+title Архитектура социальной сети 
+
+Person(user, "Пользователь", "Пользователь социальной сети", $sprite="users")
+
+Container(part_ui,"Личный кабинет пользователя","Python", "Личный кабинет пользователя",$sprite="python")
+Container(part_back, "Личный кабинет пользователя", "Python","Личный кабинет пользователя", $sprite="python")
+Container(statistics, "Statistics", "Python", "Сервис статистики", $sprite="python")
+Container(posts_comments, "Posts and Comments", "Python", "Сервис постов и комментариев", $sprite="python")
+
+ContainerQueue(view_like_topic, "views_likes.topic", "kafka", "", "kafka")
+ContainerDb(users_db, "users_postgres", "Postgres","Хранение данных о пользователях для регистрации/аутентификации", $sprite="postgresql")
+ContainerDb(posts_comments_db, "posts_comments_postgres", "Postgres", "Хранение данных сервиса постов и комментариев", $sprite="postgresql")
+ContainerDb(statistics_db, "statistics_clickhouse", "ClickHouse", "Хранение данных сервиса статистики", "ClickHouse")
+
+Rel(user, part_ui, "Регистрация/аутентификация, настройка профиля")
+Rel(part_ui, part_back, "Вызов методов", "REST")
+Rel(part_back, posts_comments, "Управление и работа с постами и комментариями", "gRPC")
+Rel(part_back, statistics, "Получение статистики для подсчета лайков и просмотров", "gRPC")
+Rel(statistics, statistics_db, "Сохраняет статистику по лайкам и просмотрам")
+Rel(posts_comments, posts_comments_db, "Сохраняет посты")
+Rel(part_back, users_db, "Сохраняет информацию о пользователях")
+Rel(part_back, view_like_topic, "Пишет топик")
+Rel(view_like_topic, statistics, "Читает топик")
+
+@enduml

@@ -1,0 +1,8 @@
+Flask==3.0.2
+SQLAlchemy==2.0.28
+Werkzeug==3.0.0
+Flask-SQLAlchemy==3.1.1
+Flask-JWT-Extended==4.6.0
+passlib==1.7.4
+timedelta==2020.12.3
+psycopg2-binary==2.9.9

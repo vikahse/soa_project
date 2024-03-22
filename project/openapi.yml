@@ -1,0 +1,151 @@
+openapi: 3.0.2
+info:
+  title: REST api for Main Service
+  description: API for user registration, login and information update
+  version: 1.0.0
+servers:
+  - url: https://app/api/v1.0
+paths:
+  /register:
+    post:
+      summary: Register a new user
+      description: This method is responsible for registering a new user. If the user forgot to enter a password or login, or both, an error should be returned. If the user with this login already exists, an error should be returned.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+            example:
+              username: vika
+              password: qwerty
+      responses:
+        201:
+          description: Successful creation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                  message: User-vika registered successfully
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                  message: Missing arguments or Existing user
+  /login:
+    post:
+      summary: Аuthorize user
+      description: This method is responsible for authorizing the user using login and password. If the user forgot to enter a password or login, or both, an error should be returned. If the user enterned wrong login, an error should be returned. If the user enterned wrong password, an error should be returned.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              example:
+                username: vika
+                password: qwerty
+      responses:
+        200:
+          description: Successful request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                  message: User-vika authenticated successfully
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                  message: Missing arguments
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                  message: Invalid username or password
+  /update:
+    put:
+      summary: Update user's information
+      description: This method is responsible for updating the user's data.
+      security:
+        - jwt_auth:
+            - write
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+                birth_date:
+                  type: string
+                  format: date
+                email:
+                  type: string
+                phone_number:
+                  type: string
+            example:
+              first_name: Victoria
+              last_name: Kovalevskaya
+              birth_date: 06.12.2002
+              email: vika@gmail.com
+              phone_number: 89991232334
+      responses:
+        200:
+          description: Successful request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                  message: Hello, vika! Your data updated successfully!
+
+components:
+  securitySchemes:
+    jwt_auth:
+      type: apiKey
+      in: cookie
+      name: access_token_cookie
